@@ -7,7 +7,7 @@
 # and get a fuking log in /var/log/${repName}/yyyy-mm-dd.log
 # echo every line_info to log
 import secrets
-import os , sys
+import os, sys
 import time
 from multiprocessing import Process
 
@@ -16,48 +16,55 @@ timeLimit = 1.5
 
 total = 0
 right = 0
-easterEgg = -1938475062
-current_target = easterEgg
-current_typing = easterEgg
+current_target = -1
+current_typing = -1
+
+#  use Signal like a shared memory
+isTiming = False
 
 
 def check():
+    global current_target
+    global current_typing
+    global isTiming
+
+    isTiming = True
+    print("check",isTiming)
     time.sleep(timeLimit)
+    isTiming = False
+    print("check",isTiming)
+
     if current_typing == current_target:
         return
+
     print("you lose for now", end="")
-    return easterEgg
+    return
 
 
 def First():
     clear(None)
-    print("current_set=", keySet, " ", easterEgg)
+    print("current_set=", keySet)
     print("press digit to start, alpha to exit. ", end="")
     input()
 
 
-
-
-
 def info_head():
     global current_target
+    global current_typing
     current_target = secrets.choice(keySet)
     print({
         "try_type": current_target,
         "total": total,
-        "score": 0.00 if total == 0 else round ((right / total) * 100),
+        "score": 0.00 if total == 0 else round((right / total) * 100),
     })
 
+
 def handleInput():
-    c: str = input()
+    c = input()
     if c.isalpha():
         exit()
-    #  bad fix condition "" for lose check,
-    #  i think the fine solution is class and signal
-    #  OR if i can
-    if c == "":
-        return easterEgg
-    return int(c)
+    #  c will be "" if timeout and no one try
+    return -1 if c == "" else int(c)
 
 
 def type_body():
@@ -65,12 +72,23 @@ def type_body():
     global total
     global current_target
     global current_typing
+    global isTiming
+    # use for condition but no change
+    # global isTimeOut
+    # global isTiming
     print("> ", end="")
+
+    # here timing is start because computer is so fast
     current_typing = handleInput()
-    if current_typing == current_target:
-        right += 1
+    print("type_body",current_target,current_typing,isTiming)
+    # find bug  isTiming always false
+    if isTiming:
+        if current_typing == current_target:
+            right += 1
     total += 1
-    current_typing = easterEgg
+    current_typing = -1
+    input()
+
 
 
 def clear(t: Process):
@@ -85,6 +103,7 @@ def main():
     t.start()
     type_body()
     clear(t)
+    print(current_typing)
 
 
 if __name__ == '__main__':
