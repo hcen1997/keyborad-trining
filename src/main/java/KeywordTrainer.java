@@ -40,7 +40,7 @@ public class KeywordTrainer {
         }
     }
 
-    private int getResult(Future<String> stringFuture, ConsoleInputReadTask inputTask) throws InterruptedException, ExecutionException, TimeoutException {
+    private int getResult(Future<String> stringFuture, ConsoleInputReadTask inputTask) throws InterruptedException, ExecutionException {
         try {
             // there is a bug, and i cannot solve it
             // if i use buffered input, it can read after last training is timeout

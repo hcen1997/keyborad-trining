@@ -4,10 +4,10 @@
 # the view is very simple. it only have 2 line. head for info, body is for
 # typing
 
-# and get a fuking log in /var/log/${repName}/yyyy-mm-dd.log
+# and get a fucking log in /var/log/${repName}/yyyy-mm-dd.log
 # echo every line_info to log
 import secrets
-import os, sys
+import os
 import time
 from multiprocessing import Process
 
@@ -29,10 +29,10 @@ def check():
     global isTiming
 
     isTiming = True
-    print("check",isTiming)
+    print("check", isTiming)
     time.sleep(timeLimit)
     isTiming = False
-    print("check",isTiming)
+    print("check", isTiming)
 
     if current_typing == current_target:
         return
@@ -41,7 +41,7 @@ def check():
     return
 
 
-def First():
+def first():
     clear(None)
     print("current_set=", keySet)
     print("press digit to start, alpha to exit. ", end="")
@@ -59,7 +59,7 @@ def info_head():
     })
 
 
-def handleInput():
+def handle_input():
     c = input()
     if c.isalpha():
         exit()
@@ -79,8 +79,8 @@ def type_body():
     print("> ", end="")
 
     # here timing is start because computer is so fast
-    current_typing = handleInput()
-    print("type_body",current_target,current_typing,isTiming)
+    current_typing = handle_input()
+    print("type_body", current_target, current_typing, isTiming)
     # find bug  isTiming always false
     if isTiming:
         if current_typing == current_target:
@@ -88,7 +88,6 @@ def type_body():
     total += 1
     current_typing = -1
     input()
-
 
 
 def clear(t: Process):
@@ -107,6 +106,6 @@ def main():
 
 
 if __name__ == '__main__':
-    First()
+    first()
     while True:
         main()

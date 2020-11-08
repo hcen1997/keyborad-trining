@@ -1,5 +1,4 @@
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 public @Data
 class TrainContext {
