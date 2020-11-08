@@ -34,8 +34,10 @@ public class KeywordTrainer {
         int result = getResult(stringFuture,inputTask);
 //        type result
         if (result == trainContext.getTryType()) {
+            trainContext.type(true);
             System.out.println("you are a winner");
         } else {
+            trainContext.type(false);
             System.out.println("sucker~");
         }
     }
@@ -48,6 +50,8 @@ public class KeywordTrainer {
             // bug fix: remove previous task
             // how to not use while true?
             // even people cannot feel while true: sleep(200ms)
+            // i dont know how to ,
+            // bug sleep and cancel flag work just fine
             String s = stringFuture.get(timeOutLimit_ms, TimeUnit.MILLISECONDS);
             System.out.println("s = " + s);
             return Integer.parseInt(s);

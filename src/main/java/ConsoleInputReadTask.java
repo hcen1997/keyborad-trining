@@ -3,11 +3,14 @@ import java.util.concurrent.Callable;
 
 public class ConsoleInputReadTask implements Callable<String> {
     private boolean cancel = false;
-    public void cancel(){
+
+    public void cancel() {
         this.cancel = true;
     }
-    ConsoleInputReadTask(){
+
+    ConsoleInputReadTask() {
     }
+
     public String call() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -15,6 +18,15 @@ public class ConsoleInputReadTask implements Callable<String> {
         System.out.print("======> ");
         do {
             try {
+//                synchronized (bufferedReader) {
+//                    if (!bufferedReader.ready()) {
+//                        bufferedReader.wait();
+//                    }
+//                    if (cancel) {
+//                        return "-1";
+//                    }
+//                    input = bufferedReader.readLine();
+//                }
                 while (!bufferedReader.ready()) {
                     if(cancel){
                         return "-1";
