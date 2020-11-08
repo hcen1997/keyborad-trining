@@ -1,39 +1,36 @@
 import lombok.SneakyThrows;
 
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class KeywordTrainer {
-    public static final int[] keySet = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-    public static final int timeOutLimit_ms = 3000;
+
 
     public static final int defaultTrainTime = 10;
 
     private final TrainContext trainContext = new TrainContext();
 
     private final ExecutorService es = Executors.newSingleThreadExecutor();
-    //    field for multithreading notice
 
 
-    // field for work
     public void first() {
-        System.out.println("current_set=" + Arrays.toString(keySet));
+        trainContext.printKeySet();
         System.out.println("press digit to start, alpha to exit. ");
     }
 
     @SneakyThrows
     public void train() {
 //        info_head();
-        int target = ThreadLocalRandom.current().nextInt(0, keySet.length);
-        trainContext.setTryType(keySet[target]);
-        System.out.println(trainContext);
+        int target = trainContext.generateNextType();
+        System.out.println(trainContext.printTarget());
 
 //        timer start  and 1 Thread start to get input
         ConsoleInputReadTask inputTask = new ConsoleInputReadTask();
         Future<String> stringFuture = es.submit(inputTask);
-        int result = getResult(stringFuture,inputTask);
+        int result = getResult(stringFuture, inputTask);
 //        type result
-        if (result == trainContext.getTryType()) {
+        if (result == target) {
             trainContext.type(true);
             System.out.println("you are a winner");
         } else {
@@ -52,8 +49,8 @@ public class KeywordTrainer {
             // even people cannot feel while true: sleep(200ms)
             // i dont know how to ,
             // bug sleep and cancel flag work just fine
-            String s = stringFuture.get(timeOutLimit_ms, TimeUnit.MILLISECONDS);
-            System.out.println("s = " + s);
+            String s = stringFuture.get(trainContext.getWaitTime(), trainContext.getTimeUnit());
+//            System.out.println("s = " + s);
             return Integer.parseInt(s);
         } catch (TimeoutException e) {
             // remove the task
@@ -65,9 +62,29 @@ public class KeywordTrainer {
     }
 
     public void end() {
-        System.out.println("total = " + trainContext.getTotal());
-        int score = trainContext.getScore();
-        System.out.println("score = " + score);
+        System.out.println(trainContext.toString());
         System.out.println("goodbye~");
+    }
+
+    public void run() {
+        first();
+        do {
+            for (int i = 0; i < KeywordTrainer.defaultTrainTime; i++) {
+                train();
+            }
+        } while (isLevelUp());
+        end();
+    }
+
+
+    private boolean isLevelUp() {
+        System.out.print("level up?(y,n) ");
+        Scanner scanner = new Scanner(System.in);
+        String s = scanner.nextLine();
+        boolean y = s.equalsIgnoreCase("y");
+        if (y) {
+            trainContext.increaseLevel();
+        }
+        return y;
     }
 }
