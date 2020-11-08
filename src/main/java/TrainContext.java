@@ -40,6 +40,7 @@ class TrainContext {
 
     public void increaseLevel() {
         level++;
+        System.out.println("you are in level "+level);
     }
 
     public void printKeySet() {
@@ -76,5 +77,11 @@ class TrainContext {
         int levelTimeout = getLevelTimeout(level);
 //        System.out.println("levelTimeout = " + levelTimeout);
         return levelTimeout;
+    }
+
+    public double calScore() {
+        double ss = Double.parseDouble(Integer.toString(score));
+        double tt = Double.parseDouble(Integer.toString(total));
+        return ss/tt;
     }
 }

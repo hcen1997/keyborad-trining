@@ -1,6 +1,5 @@
 import lombok.SneakyThrows;
 
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
@@ -71,22 +70,35 @@ public class KeywordTrainer {
         first();
         do {
             for (int i = 0; i < KeywordTrainer.defaultTrainTime; i++) {
-                Runtime.getRuntime().exec("clear");
+//                Runtime.getRuntime().exec("clear");
                 train();
             }
-        } while (isLevelUp());
+        } while (choseLevelUpOrQuit());
         end();
     }
 
 
-    private boolean isLevelUp() {
-        System.out.print("level up?(y,n) ");
+    private boolean choseLevelUpOrQuit() {
+        System.out.print("level up?(y,n,q) ");
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
-        boolean y = s.equalsIgnoreCase("y");
-        if (y) {
+        if (s.equalsIgnoreCase("y")) {
             trainContext.increaseLevel();
         }
-        return y;
+        if(s.equalsIgnoreCase("")){
+            System.err.println("exception empty string");
+        }
+        if (s.equalsIgnoreCase("q")) {
+            return false;
+        }
+        if(trainContext.calScore()>0.6){
+            return true;
+        }
+        System.out.println("you are so slow, try next time  ;)");
+        return false;
+    }
+
+    public void saveToDatabase() {
+
     }
 }

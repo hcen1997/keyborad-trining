@@ -31,7 +31,7 @@ public class ConsoleInputReadTask implements Callable<String> {
                     if(cancel){
                         return "-1";
                     }
-                    Thread.sleep(200);
+                    Thread.sleep(50);
                 }
                 input = bufferedReader.readLine();
             } catch (InterruptedException e) {
