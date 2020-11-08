@@ -66,10 +66,12 @@ public class KeywordTrainer {
         System.out.println("goodbye~");
     }
 
+    @SneakyThrows
     public void run() {
         first();
         do {
             for (int i = 0; i < KeywordTrainer.defaultTrainTime; i++) {
+                Runtime.getRuntime().exec("clear");
                 train();
             }
         } while (isLevelUp());
